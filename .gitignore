@@ -1,0 +1,45 @@
+# === Node ===
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+**/package-lock.json
+
+# === Build output ===
+dist/
+build/
+**/dist/
+**/build/
+
+# === Environment variables ===
+.env
+**/.env
+.env.local
+
+# === Logs ===
+logs/
+*.log
+**/*.log
+
+# === OS Specific ===
+.DS_Store
+Thumbs.db
+
+# === IDEs/Editors ===
+.vscode/
+.idea/
+*.swp
+
+# === React Dev Tools ===
+coverage/
+.nyc_output/
+**/coverage/
+**/.nyc_output/
+
+# === Others ===
+*.local
+*.cache
+*.bak
+*.tmp
