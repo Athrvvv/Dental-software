@@ -3,7 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
 import DashboardPage from "../pages/DashboardPage";
-import PrivateRoute from "../components/PrivateRoute";
+import PrivateRoute from "./PrivateRoute";
+import PatientList from "../components/Patient/PatientList"; // ✅ Import PatientList
 
 export default function AppRoutes() {
   return (
@@ -11,7 +12,8 @@ export default function AppRoutes() {
       <Route path="/" element={<LoginPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
-      {/* Protected Route */}
+
+      {/* ✅ Protected Routes */}
       <Route
         path="/dashboard"
         element={
@@ -20,8 +22,16 @@ export default function AppRoutes() {
           </PrivateRoute>
         }
       />
-      
-      {/* Redirect to login for any unknown routes */}
+      <Route
+        path="/patients"
+        element={
+          <PrivateRoute>
+            <PatientList />
+          </PrivateRoute>
+        }
+      />
+
+      {/* Catch-all route */}
       <Route path="*" element={<LoginPage />} />
     </Routes>
   );

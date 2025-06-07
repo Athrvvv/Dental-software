@@ -1,12 +1,24 @@
+// frontend/src/pages/DashboardPage.jsx
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { BiSolidDashboard } from "react-icons/bi";
+import { IoPersonSharp } from "react-icons/io5";
+import { FaCalendarAlt } from "react-icons/fa";
+import { IoMdSettings } from "react-icons/io";
+import { TbReportAnalytics } from "react-icons/tb";
+import { MdMessage } from "react-icons/md";
+import { GoFileSubmodule } from "react-icons/go";
+import { FaNoteSticky } from "react-icons/fa6";
+import { HiMenuAlt3, HiX } from "react-icons/hi";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [doctorName, setDoctorName] = useState("");
   const [loading, setLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -30,44 +42,141 @@ export default function DashboardPage() {
     setTimeout(() => navigate("/login"), 300);
   };
 
-  if (loading) return <div className="p-10 text-center text-lg">Loading...</div>;
+  const cards = [
+    {
+      label: "Dashboard",
+      icon: <BiSolidDashboard />,
+      color: "bg-blue-100",
+      text: "text-blue-800",
+    },
+    {
+      label: "Patients",
+      icon: <IoPersonSharp />,
+      color: "bg-yellow-100",
+      text: "text-yellow-800",
+    },
+    {
+      label: "Appointments",
+      icon: <FaCalendarAlt />,
+      color: "bg-red-100",
+      text: "text-red-800",
+    },
+    {
+      label: "Settings",
+      icon: <IoMdSettings />,
+      color: "bg-indigo-100",
+      text: "text-indigo-800",
+    },
+    {
+      label: "Reports",
+      icon: <TbReportAnalytics />,
+      color: "bg-orange-100",
+      text: "text-orange-800",
+    },
+    {
+      label: "Communication",
+      icon: <MdMessage />,
+      color: "bg-red-100",
+      text: "text-red-800",
+    },
+    {
+      label: "Files",
+      icon: <GoFileSubmodule />,
+      color: "bg-orange-100",
+      text: "text-orange-800",
+    },
+    {
+      label: "Lab Work",
+      icon: <FaNoteSticky />,
+      color: "bg-orange-100",
+      text: "text-orange-800",
+    },
+  ];
+
+  const handleCardClick = (label) => {
+    if (label === "Patients") {
+      navigate("/patients");
+    } else if (label === "Dashboard") {
+      navigate("/dashboard");
+    }
+    // Add other routes similarly as needed
+  };
+
+  if (loading)
+    return <div className="p-10 text-center text-lg">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-emerald-700">Shree Dental Clinic</h1>
-        <div className="flex items-center gap-4">
-          <p className="text-gray-700 font-medium hidden sm:block">
+    <div className="min-h-screen bg-gray-50 overflow-y-auto">
+      {/* Top Navbar */}
+      <div className="bg-white shadow-md px-4 py-4 flex items-center justify-between sticky top-0 z-40">
+        <h1 className="text-xl font-bold text-emerald-700">
+          Shree Dental Clinic
+        </h1>
+        <div className="hidden md:flex gap-4 items-center">
+          <span className="text-gray-700 font-medium">
             Welcome, Dr. {doctorName}
-          </p>
+          </span>
           <button
             onClick={() => setShowLogoutModal(true)}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md shadow-md transition transform hover:scale-105"
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition"
           >
             Logout
           </button>
         </div>
+        <div className="md:hidden">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-2xl text-emerald-700"
+          >
+            {menuOpen ? <HiX /> : <HiMenuAlt3 />}
+          </button>
+        </div>
       </div>
 
-      {/* Dashboard Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {[
-          { label: "Dashboard", color: "bg-blue-100", text: "text-blue-800" },
-          { label: "Patients", color: "bg-yellow-100", text: "text-yellow-800" },
-          { label: "Appointments", color: "bg-red-100", text: "text-red-800" },
-          { label: "Settings", color: "bg-indigo-100", text: "text-indigo-800" },
-          { label: "Reports", color: "bg-orange-100", text: "text-orange-800" },
-          { label: "Communication", color: "bg-red-100", text: "text-red-800" },
-          { label: "Files", color: "bg-orange-100", text: "text-orange-800" },
-          { label: "Lab Work", color: "bg-orange-100", text: "text-orange-800" },
-        ].map((item, idx) => (
+      {/* Mobile Dropdown Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="fixed top-4 right-4 z-50 bg-white rounded-lg shadow-xl p-4 w-64"
+            initial={{ opacity: 0, scale: 0.8, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -10 }}
+          >
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-sm font-semibold text-emerald-700">
+                Hello, Dr. {doctorName}
+              </h3>
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="text-gray-600 hover:text-black text-lg"
+              >
+                <HiX />
+              </button>
+            </div>
+            <button
+              onClick={() => {
+                setShowLogoutModal(true);
+                setMenuOpen(false);
+              }}
+              className="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+            >
+              Logout
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Dashboard Cards */}
+      <div className="max-w-[1600px] mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6 p-6">
+        {cards.map((item, idx) => (
           <motion.div
             whileHover={{ scale: 1.05 }}
             key={idx}
-            className={`rounded-lg p-6 shadow-md flex items-center justify-center text-center font-semibold text-lg cursor-pointer ${item.color} ${item.text}`}
+            onClick={() => handleCardClick(item.label)}
+            className={`flex flex-col items-center justify-center gap-3 py-8 h-48 sm:h-56 rounded-xl shadow-md font-semibold text-lg cursor-pointer ${item.color} ${item.text}`}
           >
-            {item.label}
+            <div className="text-4xl">{item.icon}</div>
+            <div>{item.label}</div>
           </motion.div>
         ))}
       </div>
@@ -87,8 +196,12 @@ export default function DashboardPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
             >
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Confirm Logout</h2>
-              <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                Confirm Logout
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to logout?
+              </p>
               <div className="flex justify-end gap-4">
                 <button
                   className="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300"

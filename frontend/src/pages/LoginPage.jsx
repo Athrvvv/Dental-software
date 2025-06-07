@@ -11,7 +11,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Redirect to dashboard if already logged in
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) navigate("/dashboard");
@@ -50,11 +49,15 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      const res = await api.post("/api/users/login", {
+      const res = await api.post("/users/login", {
         fullName: formData.doctorName,
         password: formData.password
       });
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+
+     localStorage.setItem("user", JSON.stringify(res.data.user));
+api.defaults.headers.common["Authorization"] = `Bearer ${res.data.user.token}`;
+
+
       navigate("/dashboard");
     } catch (err) {
       console.error("Login error:", err);

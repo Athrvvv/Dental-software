@@ -48,7 +48,7 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      const res = await api.post('/api/users/signup', formData);
+      const res = await api.post('/users/signup', formData);
       alert('✅ Signup successful! Please login.');
       navigate('/login');
     } catch (err) {
